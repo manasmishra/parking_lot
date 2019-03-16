@@ -1,4 +1,4 @@
-
+const Axios = require('axios');
 
 exports.getAllArticles = (req, res, next) => {
   console.log('Inside get All authors method.');
@@ -19,15 +19,27 @@ exports.getArticleByTitleAndDescription = (req, res, next) => {
 }
 
 exports.getArticleByDate = (req, res, next) => {
-  const date = req.params.date || Date.now();
-  console.log('Inside getArticleByDate.', date);
-  res.status(200).send({ success: true, data: { 
-    articles: [
-      {id: 1, date},
-      {id: 2, date},
-      {id: 3, date}
-    ]
-  } });
+  const date = new Date(req.params.date);
+  const year = date.getFullYear();
+  const month = date.getMonth() < 10 ? '0'+date.getMonth() : date.getMonth();
+  const day = date.getDay() < 10 ? '0'+date.getDay() : date.getDay();
+  console.log('Inside getArticleByDate.', year, '/', month, '/', day);
+  // Below is how we can call a 
+  Axios.get('https://www.thehindu.com/archive/web/'+year+'/'+month+'/'+day)
+  .then(function (response) {
+    console.log('>>>>>>>>>', response);
+    return res.status(200).send({ success: true, data: { 
+      articles: [
+        {id: 1, date},
+        {id: 2, date},
+        {id: 3, date}
+      ]
+    } });
+  })
+  .catch(function (error) {
+    console.log('EEEEEEE', error);
+    next(error);
+  });
 }
 
 exports.getArticleByCity = (req, res, next) => {
