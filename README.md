@@ -11,7 +11,7 @@ f. Search articles based on tags associated with articles
 g. Search articles based on city name
 h. Search articles based on news categories
 
-Postman collection URl for the implemented APIs: https://www.getpostman.com/collections/c71c05a7fb796a93814f
+Postman collection URl for the implemented APIs: https://www.getpostman.com/collections/b7e648077f5f52b28b0f
 
 Approach:
 1. Refer DBDesign.png to get a clear idea of how we can do the DB design for the above problem statement(minimalistic one).
@@ -20,4 +20,6 @@ Approach:
 4. To check the APIs use postman collection shared.
 5. In the API Articles by date(http://localhost:3003/articles/2019-03-02) I have done a http call to hindu site to get the data(not in desired format it directly gives the HTML of that page).
 6. If we need data as json or some format that an API should return we need to parse the HTML(web crawling can be used) that we are getting from the Hindu site.
-
+7. Using web-scrapping implemented for 2 APIs to get the titles properly
+  a. Implemented for http://localhost:3003/categories/national/articles/all
+  b. Implemented for http://localhost:3003/articles/by_city/hyderabad
