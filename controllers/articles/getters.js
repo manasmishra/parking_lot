@@ -1,4 +1,8 @@
 const Axios = require('axios');
+const { check, validationResult } = require('express-validator/check');
+const { PreconditionFailed } = require('http-errors');
+const rp = require('request-promise');
+const cheerio = require('cheerio');
 
 exports.getAllArticles = (req, res, next) => {
   console.log('Inside get All authors method.');
@@ -43,13 +47,36 @@ exports.getArticleByDate = (req, res, next) => {
 }
 
 exports.getArticleByCity = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.array()[0].msg !=='Invalid value') {
+    // console.log('errors.array() is:', errors.array()[0].msg);
+    next(PreconditionFailed(errors.array()[0].msg));
+  }
   const city_name = req.params.city_name;
-  console.log('Inside getArticleByCity.', city_name);
-  res.status(200).send({ success: true, data: { 
-    articles: [
-      {id: 1, city_name},
-      {id: 2, city_name},
-      {id: 3, city_name}
-    ]
-  } });
+  rp('https://www.thehindu.com/news/cities/' + city_name)
+  .then(function (response) {
+    var $ = cheerio.load(cheerio('.feature-news', response).html());
+    // console.log('>>>>>>>>>',d)
+    var articles = [];
+    $('.story-card-news > h3 > a', response).each(function(i, elm) {
+      articles.push({title: $(this).text()});
+      // console.log('h3>a', $(this).text()) // for testing do text() 
+  });
+  $('.story-card-news > h2 > a', response).each(function(i, elm) {
+    articles.push({title: $(this).text()});
+    // console.log('h2>a:', $(this).text()) // for testing do text() 
+});
+    return res.status(200).send(JSON.stringify({ success: true, articles: articles }));
+  })
+  .catch(function (error) {
+    console.log('EEEEEEE', error);
+    next(error);
+  });
+  // res.status(200).send({ success: true, data: { 
+  //   articles: [
+  //     {id: 1, city_name},
+  //     {id: 2, city_name},
+  //     {id: 3, city_name}
+  //   ]
+  // } });
 }
