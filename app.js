@@ -1,27 +1,20 @@
 const readline = require('readline');
 const fs = require('fs')
-const { SlotNode, SlotFactory } = require('./models/slot');
-const { Color, ColorFactory } = require('./models/color')
-const { Vehicle } = require('./models/vehicle')
+const { SlotFactory } = require('./models/slot');
+const { ColorFactory } = require('./models/color')
 const setters = require('./controllers/setters')
 const getters = require('./controllers/getters')
 
 const slotFactory = new SlotFactory();
 const colorFactory = new ColorFactory();
 let parkingLayout;
-let log = []
-
-
-// console.log('Need to read and process from file:', process.argv[2])
 const fileName = process.argv[2];
 
 const rl = readline.createInterface({
-  input: fileName ? fs.createReadStream(fileName) : process.stdin,
-  // output: process.stdout
+  input: fileName ? fs.createReadStream(fileName) : process.stdin
 });
 
 rl.on('line', (line) => {
-  // console.log(`read line is: ${line}`);
   processCommands(line)
 }).on('close', () => {
   process.exit(0)
@@ -53,48 +46,16 @@ const processCommands = (line) => {
       getters.status(parkingLayout)
       break;
     case 'registration_numbers_for_cars_with_colour':
-      // console.log('Inside registration_numbers_for_cars_with_colour', commands)
       colorName = commands[1]
-      colorObj = colorFactory.getColor(colorName)
-      log = [];
-      if(colorObj) {
-        const vehicles = colorObj.vehicles;
-        vehicles.forEach(vehicle => {
-          log.push(vehicle.getVehicle())
-        });
-      }
-      console.log(log)
+      getters.registrationNumbersForCarsWithColour(colorFactory, colorName)
       break;
     case 'slot_numbers_for_cars_with_colour':
-      // console.log('Inside slot_numbers_for_cars_with_colour', commands)
       colorName = commands[1]
-      colorObj = colorFactory.getColor(colorName)
-      log = [];
-      // console.log('colorObj received for colorName:', colorName, ' is:', colorObj)
-      if(colorObj) {
-        const slots = colorObj.slots;
-        // console.log('slots are:', slots)
-        slots.forEach(slot => {
-          log.push(slot.getSlot())
-        });
-      }
-      console.log(log)
+      getters.slotNumbersForCarsWithColour(colorFactory, colorName)
       break;
     case 'slot_number_for_registration_number':
-      // console.log('Inside slot_number_for_registration_number', commands)
       let registrationNo = commands[1];
-      log = []
-      for (const key in parkingLayout) {
-        if (parkingLayout.hasOwnProperty(key) && parkingLayout[key]) {
-          const vehicle = parkingLayout[key].vehicle;
-          if(vehicle.registratioNo === registrationNo) {
-            log.push(parkingLayout[key].slot.getSlot())
-            console.log(log)
-            return;
-          }
-        }
-      }
-      console.log('Not found')
+      getters.slotNumberForRegistrationNumber(parkingLayout, registrationNo)
       break;
     case 'exit':
       process.exit(0)
