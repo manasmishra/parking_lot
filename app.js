@@ -1,21 +1,33 @@
 const readline = require('readline');
+const fs = require('fs')
 const { SlotNode, SlotFactory } = require('./models/slot');
 const { Color, ColorFactory } = require('./models/color')
 const { Vehicle } = require('./models/vehicle')
 const setters = require('./controllers/setters')
 const getters = require('./controllers/getters')
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 const slotFactory = new SlotFactory();
 const colorFactory = new ColorFactory();
 let parkingLayout;
 let log = []
+
+
+// console.log('Need to read and process from file:', process.argv[2])
+const fileName = process.argv[2];
+
+const rl = readline.createInterface({
+  input: fileName ? fs.createReadStream(fileName) : process.stdin,
+  // output: process.stdout
+});
+
 rl.on('line', (line) => {
   // console.log(`read line is: ${line}`);
+  processCommands(line)
+}).on('close', () => {
+  process.exit(0)
+})
+
+const processCommands = (line) => {
   let colorName, colorObj;
   let commands = line.split(' ');
   switch (commands[0]) {
@@ -91,6 +103,4 @@ rl.on('line', (line) => {
       console.log('Please Enter a valid command.')
       break;
   }
-}).on('close', () => {
-  process.exit(0)
-})
+}
