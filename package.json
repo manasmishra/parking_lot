@@ -1,31 +1,20 @@
 {
   "name": "newsarticles",
   "version": "1.0.0",
-  "description": "Demo project for news artilces",
+  "description": "Demo project for Parking Lot",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/manasmishra/newsarticles.git"
+    "url": "git+https://github.com/manasmishra/parking_lot.git"
   },
   "author": "Manas",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/manasmishra/newsarticles/issues"
+    "url": "https://github.com/manasmishra/parking_lot/issues"
   },
-  "homepage": "https://github.com/manasmishra/newsarticles#readme",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "cheerio": "^1.0.0-rc.2",
-    "cookie-parser": "^1.4.4",
-    "express": "^4.16.4",
-    "express-validator": "^5.3.1",
-    "http-errors": "^1.7.2",
-    "jquery": "^3.3.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
-    "steeltoe": "^1.0.1"
-  }
+  "homepage": "https://github.com/manasmishra/parking_lot#readme",
+  "dependencies": {}
 }
