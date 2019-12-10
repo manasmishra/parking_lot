@@ -1,4 +1,8 @@
 #Parking_lot
+Assumptions:
+I have used in-memory cache for simplicity can be implemented through a proper DB as well.
+I have not written any code comments, if required let me know will do the same.
+
 Steps to Run Unit Test Cases of the project:
 1. To install dev dependencies please type npm install
 2. To run the test cases use command: npm test
